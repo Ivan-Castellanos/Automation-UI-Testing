@@ -11,19 +11,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class SearchTest {
 
-    private WebDriver driver;
     private final static Logger LOGGER = LogManager.getLogger(SearchTest.class);
     File file = new File("sec/test/resources/data");
+    private WebDriver driver;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -32,17 +30,21 @@ public class SearchTest {
     }
 
     @Test
-    public void testSearch() throws InterruptedException {
+    public void testSearch() {
         WebElement searchbox = driver.findElement(By.id("search_query_top"));
         searchbox.clear();
         searchbox.sendKeys("dresses");
         searchbox.submit();
         List<WebElement> count = driver.findElements(By.className("product-container"));
-        LOGGER.info("There are " + count.size() + " coincident elements.");
+        if (0 == count.size()) {
+            LOGGER.info("No matching results.");
+        } else {
+            LOGGER.info("There are " + count.size() + " coincident elements.");
+        }
     }
 
     @After
-    public void teardown(){
+    public void teardown() {
         driver.quit();
     }
 }
